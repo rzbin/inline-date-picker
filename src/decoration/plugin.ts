@@ -15,20 +15,23 @@ import moment from "moment";
 class InlineDatePickerWidget extends WidgetType {
 	from: number;
 	to: number;
+	date: moment.Moment;
 	format: string;
 
 	input?: HTMLInputElement;
 
-	constructor(from: number, to: number, format: string) {
+	constructor(from: number, to: number, date: moment.Moment, format: string) {
 		super();
 		this.from = from;
 		this.to = to;
+		this.date = date;
 		this.format = format;
 	}
 
 	toDOM(view: EditorView): HTMLElement {
 		const input = createEl("input");
 		input.type = "date";
+		input.value = this.date.format("YYYY-MM-DD");
 		input.classList.add("inline-date-picker-input");
 
 		// To prevent using the text input
@@ -103,19 +106,16 @@ export class InlineDatePickerPluginValue implements PluginValue {
 						);
 						// TODO: Get date format from settings.
 						const format = "YYYY-MM-DD";
-						const fitsDateFormat = moment(
-							nodeText,
-							format,
-							true
-						).isValid();
+						const date = moment(nodeText, format, true);
 
-						if (!fitsDateFormat) {
+						if (!date.isValid()) {
 							return;
 						}
 
 						const widget = new InlineDatePickerWidget(
 							node.from,
 							node.to,
+							date,
 							format
 						);
 
