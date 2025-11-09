@@ -1,5 +1,5 @@
 import { syntaxTree } from "@codemirror/language";
-import { EditorState, RangeSetBuilder } from "@codemirror/state";
+import { RangeSetBuilder } from "@codemirror/state";
 import {
 	ViewUpdate,
 	PluginValue,
@@ -13,6 +13,17 @@ import {
 import moment from "moment";
 
 class InlineDatePickerWidget extends WidgetType {
+	from: number;
+	to: number;
+	format: string;
+
+	constructor(from: number, to: number, format: string) {
+		super();
+		this.from = from;
+		this.to = to;
+		this.format = format;
+	}
+
 	toDOM(view: EditorView): HTMLElement {
 		const input = createEl("input");
 		input.type = "date";
@@ -27,9 +38,16 @@ class InlineDatePickerWidget extends WidgetType {
 
 		input.onchange = () => {
 			const date = moment(input.value);
-			// TODO: Get date format from settings.
-			const formattedDate = date.format("YYYY-MM-DD");
-			console.log("Selected date:", formattedDate);
+			const formattedDate = date.format(this.format);
+
+			const transaction = view.state.update({
+				changes: {
+					from: this.from,
+					to: this.to,
+					insert: formattedDate,
+				},
+			});
+			view.dispatch(transaction);
 		};
 
 		return input;
@@ -65,9 +83,10 @@ class InlineDatePickerPluginValue implements PluginValue {
 							node.to
 						);
 						// TODO: Get date format from settings.
+						const format = "YYYY-MM-DD";
 						const fitsDateFormat = moment(
 							nodeText,
-							"YYYY-MM-DD",
+							format,
 							true
 						).isValid();
 
@@ -79,7 +98,11 @@ class InlineDatePickerPluginValue implements PluginValue {
 							node.from,
 							node.from,
 							Decoration.replace({
-								widget: new InlineDatePickerWidget(),
+								widget: new InlineDatePickerWidget(
+									node.from,
+									node.to,
+									format
+								),
 							})
 						);
 					}
