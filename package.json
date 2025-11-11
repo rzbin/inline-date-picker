@@ -13,14 +13,12 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.3.4",
+		"@codemirror/language": "^6.11.3",
 		"@types/bun": "latest",
 		"obsidian": "latest"
 	},
 	"peerDependencies": {
 		"typescript": "^5"
-	},
-	"dependencies": {
-		"@codemirror/language": "^6.11.3"
 	},
 	"private": true,
 	"license": "MIT"
