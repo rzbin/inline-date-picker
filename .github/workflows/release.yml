@@ -1,0 +1,43 @@
+name: Release Obsidian plugin
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    name: Create and publish release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      - name: Build plugin
+        run: bun run build
+      - name: Read version
+        id: version
+        run: |
+          echo "version=$(jq -r .version manifest.json)" >> "$GITHUB_OUTPUT"
+          echo "Read version $version from manifest.json"
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "${{ steps.version.outputs.version }}"
+          name: "${{ steps.version.outputs.version }}"
+          body: "Release version ${{ steps.version.outputs.version }}\n\n${{ github.event.head_commit.message }}"
+          draft: false
+          prerelease: false
+          files: |
+            manifest.json
+            main.js
+            styles.css
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
