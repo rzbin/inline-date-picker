@@ -21,10 +21,10 @@ export const openDatePicker: Command = {
 
 		// Attempt to open the date picker of an existing widget at the cursor position
 		const offset = editor.posToOffset(editor.getCursor());
-		const widgetPointers = plugin.widgetPointers;
-		for (const pointer of widgetPointers) {
-			if (offset >= pointer.from && offset <= pointer.to) {
-				pointer.widget.showPicker();
+		const widgets = plugin.widgets;
+		for (const widget of widgets) {
+			if (offset >= widget.from && offset <= widget.to) {
+				widget.showPicker();
 				return;
 			}
 		}

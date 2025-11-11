@@ -5,7 +5,7 @@ import { Command } from "obsidian";
 export const insertTodaysDate: Command = {
 	id: "insert-todays-date",
 	name: "Insert today's date",
-	editorCallback: (editor, view) => {
+	editorCallback: (editor) => {
 		const format = InlineDatePickerPlugin.settings.dateFormat;
 		const formattedDate = moment().format(format);
 		const cursor = editor.getCursor();

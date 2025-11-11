@@ -55,11 +55,15 @@ class InlineDatePickerSettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		new Setting(containerEl)
+		const dateFormatDescription = () => {
+			const format = InlineDatePickerPlugin.settings.dateFormat;
+			const example = moment().format(format);
+			return `Set the format for inserted dates. Uses Moment.js formatting. Your current syntax looks like this: ${example}`;
+		};
+
+		const dateFormatSetting = new Setting(containerEl)
 			.setName("Date Format")
-			.setDesc(
-				"Dates will be generated and parsed using this (Moment.js) format."
-			)
+			.setDesc(dateFormatDescription())
 			.addText((text) =>
 				text
 					.setPlaceholder(DEFAULT_SETTINGS.dateFormat)
@@ -67,6 +71,7 @@ class InlineDatePickerSettingTab extends PluginSettingTab {
 					.onChange(async (value) => {
 						InlineDatePickerPlugin.settings.dateFormat = value;
 						await this.plugin.saveSettings();
+						dateFormatSetting.setDesc(dateFormatDescription());
 					})
 			);
 	}
