@@ -21,5 +21,9 @@
 		"typescript": "^5"
 	},
 	"private": true,
-	"license": "MIT"
+	"license": "MIT",
+	"dependencies": {
+		"@codemirror/state": "^6.5.2",
+		"@codemirror/view": "^6.38.6"
+	}
 }

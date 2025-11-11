@@ -3,6 +3,10 @@
   "workspaces": {
     "": {
       "name": "inline-date-picker",
+      "dependencies": {
+        "@codemirror/state": "^6.5.2",
+        "@codemirror/view": "^6.38.6",
+      },
       "devDependencies": {
         "@biomejs/biome": "2.3.4",
         "@codemirror/language": "^6.11.3",
