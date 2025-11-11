@@ -10,7 +10,7 @@ import {
 	type ViewUpdate,
 	WidgetType,
 } from "@codemirror/view"
-import moment from "moment"
+import { moment } from "obsidian"
 import InlineDatePickerPlugin from "src/main"
 
 class InlineDatePickerWidget extends WidgetType {

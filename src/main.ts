@@ -1,5 +1,4 @@
-import moment from "moment"
-import { type App, Plugin, PluginSettingTab, Setting } from "obsidian"
+import { type App, moment, Plugin, PluginSettingTab, Setting } from "obsidian"
 import { insertTodaysDate } from "src/commands/insertTodaysDate"
 import { insertTodaysDateLink } from "src/commands/insertTodaysDateLink"
 import { openDatePicker } from "src/commands/openDatePicker"
