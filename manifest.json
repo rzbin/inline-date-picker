@@ -1,7 +1,7 @@
 {
 	"id": "date-picker",
 	"name": "Date Picker",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"minAppVersion": "0.15.0",
 	"description": "Pick dates using a calendar view.",
 	"author": "Rzbin",
