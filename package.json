@@ -22,5 +22,6 @@
 	"dependencies": {
 		"@codemirror/language": "^6.11.3"
 	},
-	"private": true
+	"private": true,
+	"license": "MIT"
 }
