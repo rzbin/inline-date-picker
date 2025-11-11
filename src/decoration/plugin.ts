@@ -1,71 +1,71 @@
-import { syntaxTree } from "@codemirror/language";
-import { RangeSetBuilder } from "@codemirror/state";
+import { syntaxTree } from "@codemirror/language"
+import { RangeSetBuilder } from "@codemirror/state"
 import {
-	ViewUpdate,
-	type PluginValue,
-	EditorView,
-	ViewPlugin,
-	type DecorationSet,
 	Decoration,
-	WidgetType,
+	type DecorationSet,
+	type EditorView,
 	type PluginSpec,
-} from "@codemirror/view";
-import InlineDatePickerPlugin from "src/main";
-import moment from "moment";
+	type PluginValue,
+	ViewPlugin,
+	type ViewUpdate,
+	WidgetType,
+} from "@codemirror/view"
+import moment from "moment"
+import InlineDatePickerPlugin from "src/main"
 
 class InlineDatePickerWidget extends WidgetType {
-	from: number;
-	to: number;
-	date: moment.Moment;
-	format: string;
+	from: number
+	to: number
+	date: moment.Moment
+	format: string
 
-	input: HTMLInputElement;
+	input: HTMLInputElement
 
 	constructor(from: number, to: number, date: moment.Moment, format: string) {
-		super();
-		this.from = from;
-		this.to = to;
-		this.date = date;
-		this.format = format;
-		this.input = createEl("input");
+		super()
+		this.from = from
+		this.to = to
+		this.date = date
+		this.format = format
+		this.input = createEl("input")
 	}
 
 	toDOM(view: EditorView): HTMLElement {
-		this.input.type = "date";
-		this.input.value = this.date.format("YYYY-MM-DD");
-		this.input.classList.add("inline-date-picker-input");
+		this.input.type = "date"
+		this.input.value = this.date.format("YYYY-MM-DD")
+		this.input.classList.add("inline-date-picker-input")
 
 		// To prevent using the text input
 		this.input.addEventListener("mouseup", (e) => {
-			e.preventDefault();
-			this.input.blur();
-			this.input.showPicker();
-		});
+			e.preventDefault()
+			this.input.blur()
+			this.input.showPicker()
+		})
 
 		// Workaround to return focus to the editor when the picker is closed
 		this.input.addEventListener("mouseup", () => {
-			view.focus();
-		});
+			view.focus()
+		})
 		this.input.addEventListener("blur", () => {
-			view.focus();
-		});
-		this.input.addEventListener("keydown", (e) => {
-			view.focus();
-		});
+			view.focus()
+		})
+		this.input.addEventListener("keydown", () => {
+			view.focus()
+		})
 
 		this.input.onchange = () => {
-			const date = moment(this.input.value);
-			const formattedDate = date.format(this.format);
+			const date = moment(this.input.value)
+			const formattedDate = date.format(this.format)
 
 			// Check if the cursor is within the range from-to, if so, move it to the end of the inserted date
-			const cursor = view.state.selection.main;
+			const cursor = view.state.selection.main
 			const isCursorInRange =
-				cursor.anchor >= this.from && cursor.anchor <= this.to;
+				cursor.anchor >= this.from && cursor.anchor <= this.to
 			const selection = isCursorInRange
 				? {
 						anchor: this.from + formattedDate.length,
-				  }
-				: undefined;
+					}
+				: undefined
 
 			const transaction = view.state.update({
 				changes: {
@@ -74,16 +74,16 @@ class InlineDatePickerWidget extends WidgetType {
 					insert: formattedDate,
 				},
 				selection,
-			});
-			view.dispatch(transaction);
-		};
+			})
+			view.dispatch(transaction)
+		}
 
-		return this.input;
+		return this.input
 	}
 
 	showPicker() {
-		this.input.focus({ preventScroll: true });
-		this.input.showPicker();
+		this.input.focus({ preventScroll: true })
+		this.input.showPicker()
 	}
 
 	override eq(other: InlineDatePickerWidget): boolean {
@@ -92,82 +92,74 @@ class InlineDatePickerWidget extends WidgetType {
 			this.to === other.to &&
 			this.date.isSame(other.date) &&
 			this.format === other.format
-		);
+		)
 	}
 }
 
 export class InlineDatePickerViewPlugin implements PluginValue {
-	decorations: DecorationSet;
-	widgets: InlineDatePickerWidget[] = [];
+	decorations: DecorationSet
+	widgets: InlineDatePickerWidget[] = []
 
 	constructor(view: EditorView) {
-		this.decorations = this.buildDecorations(view);
+		this.decorations = this.buildDecorations(view)
 	}
 
 	update(update: ViewUpdate) {
-		if (
-			update.docChanged ||
-			update.viewportChanged ||
-			update.focusChanged
-		) {
-			this.decorations = this.buildDecorations(update.view);
+		if (update.docChanged || update.viewportChanged || update.focusChanged) {
+			this.decorations = this.buildDecorations(update.view)
 		}
 	}
 
 	destroy() {}
 
 	buildDecorations(view: EditorView): DecorationSet {
-		this.widgets = [];
-		const builder = new RangeSetBuilder<Decoration>();
+		this.widgets = []
+		const builder = new RangeSetBuilder<Decoration>()
 
-		for (let { from, to } of view.visibleRanges) {
+		for (const { from, to } of view.visibleRanges) {
 			syntaxTree(view.state).iterate({
 				from,
 				to,
 				enter: (node) => {
 					if (node.type.name.startsWith("hmd-internal-link")) {
-						const nodeText = view.state.doc.sliceString(
-							node.from,
-							node.to
-						);
-						const format =
-							InlineDatePickerPlugin.settings.dateFormat;
-						const date = moment(nodeText, format, true);
+						const nodeText = view.state.doc.sliceString(node.from, node.to)
+						const format = InlineDatePickerPlugin.settings.dateFormat
+						const date = moment(nodeText, format, true)
 
 						if (!date.isValid()) {
-							return;
+							return
 						}
 
 						const widget = new InlineDatePickerWidget(
 							node.from,
 							node.to,
 							date,
-							format
-						);
+							format,
+						)
 
-						this.widgets.push(widget);
+						this.widgets.push(widget)
 
 						builder.add(
 							node.from,
 							node.from,
 							Decoration.replace({
 								widget,
-							})
-						);
+							}),
+						)
 					}
 				},
-			});
+			})
 		}
 
-		return builder.finish();
+		return builder.finish()
 	}
 }
 
 const pluginSpec: PluginSpec<InlineDatePickerViewPlugin> = {
 	decorations: (value: InlineDatePickerViewPlugin) => value.decorations,
-};
+}
 
 export const inlineDatePickerViewPlugin = ViewPlugin.fromClass(
 	InlineDatePickerViewPlugin,
-	pluginSpec
-);
+	pluginSpec,
+)
