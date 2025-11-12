@@ -1,3 +1,4 @@
+import type { EditorView } from "@codemirror/view"
 import { type Command, Notice } from "obsidian"
 import {
 	type InlineDatePickerViewPlugin,
@@ -9,7 +10,7 @@ export const openDatePicker: Command = {
 	name: "Open date picker",
 	editorCallback: (editor, view) => {
 		// @ts-expect-error, not typed
-		const editorView = view.editor.cm as EditorView
+		const editorView = view.editor?.cm as EditorView
 
 		const plugin = editorView.plugin(
 			inlineDatePickerViewPlugin,

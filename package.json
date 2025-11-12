@@ -1,6 +1,6 @@
 {
 	"name": "date-picker",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "Pick dates using a calendar view in Obsidian.",
 	"main": "main.js",
 	"packageManager": "bun@1.2.22",
@@ -14,12 +14,10 @@
 	"devDependencies": {
 		"@biomejs/biome": "2.3.4",
 		"@codemirror/language": "^6.11.3",
+		"@codemirror/state": "^6.5.2",
+		"@codemirror/view": "^6.38.6",
 		"@types/bun": "latest",
 		"obsidian": "latest"
-	},
-	"dependencies": {
-		"@codemirror/state": "^6.5.2",
-		"@codemirror/view": "^6.38.6"
 	},
 	"peerDependencies": {
 		"typescript": "^5"
