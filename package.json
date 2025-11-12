@@ -1,6 +1,6 @@
 {
 	"name": "date-picker",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "Pick dates using a calendar view in Obsidian.",
 	"main": "main.js",
 	"packageManager": "bun@1.2.22",
