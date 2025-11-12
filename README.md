@@ -43,3 +43,7 @@ To format, lint, and type-check the code, run:
 ```bash
 bun run check
 ```
+
+## Manual Installation
+
+Go to the releases page and download `main.js`, `manifest.json`, and `styles.css`. Place them in `<Vault>/.obsidian/plugins/date-picker/`.
