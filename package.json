@@ -14,7 +14,7 @@
 	"devDependencies": {
 		"@biomejs/biome": "2.3.4",
 		"@codemirror/language": "^6.11.3",
-		"@codemirror/state": "^6.5.2",
+		"@codemirror/state": "6.5.0",
 		"@codemirror/view": "^6.38.6",
 		"@types/bun": "latest",
 		"obsidian": "latest"
